@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,13 +8,38 @@
     <link rel="stylesheet" href="style.css">
 
 </head>
+
 <body>
     <!-- Inserire qui il contenuto della pagina -->
-     <div class="container">
-        
-     </div>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Immagine</th>
+                    <th>Nome</th>
+                    <th>Prezzo</th>
+                    <th> Disponibilità</th>
+                </tr>
+            </thead>
+            <tbody id="tabellaProdotti">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal nascosto" id="modale">
+        <div class="modal-content">
+            <h2 id="prodottoNome"></h2>
+            <img id="prodottoImmagine" src="" alt="">
+            <p id="prodottoDescrizione"></p>
+            <p id="prodottoPrezzo"></p>
+            <p id="prodottoDisponibilita"></p>
+            <span id="chiudi" class="close">×</span>
+        </div>
+
+    </div>
 
     <!-- Ricordarsi di inserire il link al JS -->
 
 </body>
+
 </html>
