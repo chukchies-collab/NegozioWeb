@@ -26,6 +26,10 @@ const table = document.querySelector('#tabellaProdotti');
 const modale = document.querySelector('#modale');
 
 const modalContent = document.querySelector(".modal-content");
+const filterCategory = document.querySelector('#category-filter');
+
+const cercaNome = document.querySelector('.search-bar');
+let tuttiIProdotti = [];
 
 async function fetchDati() {
     try {
@@ -34,10 +38,31 @@ async function fetchDati() {
             throw Error(`${answer.status} : ${answer.statusText}`)
         }
         const products = await answer.json();
+        tuttiIProdotti=products;
         showProducts(products)
+        category(products)
+    
+
     } catch (Error) {
         // alert(`Si è verificato un errore: ${Error.message}`)
     }
+}
+
+
+function category(listproducts) {
+    const listOfCategories = [];
+    listproducts.forEach(product => {
+        if (!listOfCategories.includes(product.categoria)) {
+            listOfCategories.push(product.categoria);
+        }
+    });
+
+    listOfCategories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        filterCategory.appendChild(option);
+    });
 }
 
 function showProducts(listproducts) {
@@ -51,7 +76,7 @@ function showProducts(listproducts) {
     listproducts.forEach(product => {
         data += `
     <tr>
-    <td> <img src="${product.immagine}" style="width: 50px;"> </td>
+    <td> <img src="${product.immagine}"> </td>
     <td> ${product.nome}</td> 
     <td> ${product.prezzo}€</td>
     <td> ${product.disponibilita ? "🟢 Disponibile" : "🔴 Esaurito"}</td>
@@ -87,5 +112,32 @@ function ShowDescription(row, products) {
 
     });
 }
+
+
+
+ function applicaFiltri() {
+    
+    const testoCercato = cercaNome.value.toLowerCase();
+    const categoriaSelezionata = filterCategory.value;
+
+    
+    const prodottiFiltrati = tuttiIProdotti.filter(product => {
+        const matchNome = product.nome.toLowerCase().includes(testoCercato);
+        
+       
+        const matchCategoria = categoriaSelezionata === "" || product.categoria === categoriaSelezionata;
+        
+        return matchNome && matchCategoria;
+    });
+
+    showProducts(prodottiFiltrati);
+}
+
+
+cercaNome.addEventListener('input', applicaFiltri);
+filterCategory.addEventListener('change', applicaFiltri);
+
+
+
 
 fetchDati();

@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prodotti Negozio Online</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
-    <!-- Inserire qui il contenuto della pagina -->
+    <div class="filters">
+        <input type="text" class="search-bar" id="search-bar" placeholder="Cerca prodotto per nome...">
+        <select class="category-filter" id="category-filter">
+            <option value="">Tutte le categorie</option>
+        </select>
+    </div>
+
     <div class="container">
         <table>
             <thead>
@@ -38,7 +43,7 @@
         </div>
 
     </div>
-
+    
     <script src="script.js"></script>
 
 </body>
