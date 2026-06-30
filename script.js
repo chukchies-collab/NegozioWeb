@@ -21,6 +21,71 @@
  * - Aggiungi un filtro per categoria (dropdown) per mostrare solo i prodotti di una certa categoria
  * Nota: i filtri devono lavorare insieme e sui dati già recuperati, senza fare nuove richieste all'API
  */
+const BASE_URL = 'http://localhost:5000/api/products';
+const table = document.querySelector('#tabellaProdotti');
+const modale = document.querySelector('#modale');
 
+const modalContent = document.querySelector(".modal-content");
 
+async function fetchDati() {
+    try {
+        const answer = await fetch(`${BASE_URL}`);
+        if (!answer.ok) {
+            throw Error(`${answer.status} : ${answer.statusText}`)
+        }
+        const products = await answer.json();
+        showProducts(products)
+    } catch (Error) {
+        // alert(`Si è verificato un errore: ${Error.message}`)
+    }
+}
 
+function showProducts(listproducts) {
+    table.innerHTML = ""
+    if (listproducts.length === 0) {
+        alert("No products found")
+        return
+    }
+
+    let data = ""
+    listproducts.forEach(product => {
+        data += `
+    <tr>
+    <td> <img src="${product.immagine}" style="width: 50px;"> </td>
+    <td> ${product.nome}</td> 
+    <td> ${product.prezzo}€</td>
+    <td> ${product.disponibilita ? "🟢 Disponibile" : "🔴 Esaurito"}</td>
+    </tr>`
+    });
+    table.innerHTML = data
+
+    const row = document.querySelectorAll('tr');
+    ShowDescription(row, listproducts)
+}
+
+function ShowDescription(row, products) {
+
+    row.forEach((singleRow, index) => {
+
+        singleRow.addEventListener('click', () => {
+
+            modale.classList.remove('nascosto');
+
+            modalContent.innerHTML = `
+            <h2 id="prodottoNome"> ${products[index].nome} </h2>
+            <img id="prodottoImmagine" src="${products[index].immagine}" alt="" style="max-width: 200px;">
+            <p id="prodottoDescrizione">${products[index].descrizione}</p>
+            <p id="prodottoPrezzo">${products[index].prezzo}€</p>
+            <p id="prodottoDisponibilita"> ${products[index].disponibilita ? "🟢 Disponibile" : "🔴 Esaurito"}</p>
+            <span id="chiudi" class="close">×</span>`;
+
+            const chiudi = document.querySelector('#chiudi');
+            chiudi.addEventListener('click', () => {
+                modale.classList.add('nascosto');
+            });
+        });
+
+    });
+}
+
+fetchDati();
